@@ -1,5 +1,26 @@
 ### Create a virtual machine having the os centos.
 
+* Install firewall in the vm(centos might have firewall installed in default).(firewalld or iptables)
+* Block certain ip range/subnet using firewalld.
+* Allow http, https and ssh connection using firewall.
+* You can add other rules as well as you prefer.
+* Note: The firewall rules should be saved permanently.
+
+<br>
+
+> Install firewall in the vm
+
+firewalld was already installed in CentOS.
+
+```console
+[root@localhost ~]# yum install firewalld
+Failed to set locale, defaulting to C.UTF-8
+Last metadata expiration check: 6:23:42 ago on Tue Nov  2 03:31:44 2021.
+Package firewalld-0.9.3-7.el8.noarch is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+```
 
 > Block certain ip range/subnet using firewalld
 
