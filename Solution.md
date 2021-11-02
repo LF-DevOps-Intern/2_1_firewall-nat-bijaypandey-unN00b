@@ -13,22 +13,46 @@
 firewalld was already installed in CentOS.
 
 ```console
-[root@localhost ~]# yum install firewalld
-Failed to set locale, defaulting to C.UTF-8
-Last metadata expiration check: 6:23:42 ago on Tue Nov  2 03:31:44 2021.
-Package firewalld-0.9.3-7.el8.noarch is already installed.
-Dependencies resolved.
-Nothing to do.
-Complete!
+sudo yum install firewalld
 ```
 
 > Block certain ip range/subnet using firewalld
 
+We are rejecting traffic from 192.168.1.1-254 using firewalld.
+
+```console
+# To create a rule
+sudo firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='192.168.1.1/24' reject"
+```
+
 > Allow http, https and ssh connection using firewall
+
+We need to add ports `80 - http`, `443 - https` and `22 - ssh`
+
+```console
+
+firewall-cmd --zone=publicweb --add-service=ssh --permanent
+
+firewall-cmd --zone=publicweb --add-service=http --permanent
+
+firewall-cmd --zone=publicweb --add-service=https --permanent
+```
 
 > You can add other rules as well as you prefer
 
+Blocking TCP port 9090
+
+```console
+sudo firewall-cmd --zone=public --permanent --add-port=9090/tcp
+```
+
 > Note: The firewall rules should be saved permanently
+
+The `permanent` flag was used to create a permanent rule so that the config survies reload/reboot. This can be checked by reloading the firewall.
+
+```console
+sudo firewall-cmd --reload
+```
 
 ---
 
