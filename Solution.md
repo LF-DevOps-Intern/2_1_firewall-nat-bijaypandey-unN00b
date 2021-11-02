@@ -71,6 +71,31 @@ sudo firewall-cmd --reload
 
 > Implement NAT in the first vm, so that the second vm can access the internet
 
+Since I'm using QEMU for virtualization, I had no readily-available host-only interface. So, first step was to create a virtual adapter to libvirt using virsh with this config file. This had to be done in the host OS.
+
+```console
+# To define new interface from config file
+virsh net-define router-lan-config.xml
+
+# To start the interface
+virsh net-start router-lan
+```
+
+```xml
+# Referenced from: https://kevrocks67.github.io/blog/qemu-host-only-networking.html
+
+# router-lan-config.xml
+
+<network>
+  <name>router-lan</name>
+  <uuid>8f49de66-0947-4271-85a4-2bbe88913555</uuid>
+  <bridge name='router-lan' stp='on' delay='0'/>
+  <mac address='52:54:00:95:26:26'/>
+</network>
+```
+
+Then, the router VM was assigned 2 network interfaces - one with internet access and another with host-only interface, whereas the client VM was assigned only host-only interface. The host-only interface is to be set up as a LAN and the client should be able to get internet access using NAT.
+
 > Note: Configure the first vm as a router, so make the LAN interfaces in the first vm as gateway to the LAN network. And in the second vm configure the gateway to the ip of the first vm LAN ip.
 
 ---
