@@ -1,4 +1,4 @@
-### Create a virtual machine having the os centos.
+### 1. Create a virtual machine having the os centos.
 
 * Install firewall in the vm(centos might have firewall installed in default).(firewalld or iptables)
 * Block certain ip range/subnet using firewalld.
@@ -65,11 +65,9 @@ sudo firewall-cmd --reload
 
 ---
 
-### Create one vm with 2 network interfaces one should behave as WAN and another as LAN. Create another vm attaching the previously created LAN interface to it. 
+### 2. Create one vm with 2 network interfaces one should behave as WAN and another as LAN. Create another vm attaching the previously created LAN interface to it. 
 * Implement NAT in the first vm, so that the second vm can access the internet.
 * Note: Configure the first vm as a router, so make the LAN interfaces in the first vm as gateway to the LAN network. And in the second vm configure the gateway to the ip of the first vm LAN ip.
-
-> Implement NAT in the first vm, so that the second vm can access the internet
 
 Since I'm using QEMU for virtualization, I had no readily-available host-only interface. So, first step was to create a virtual adapter to libvirt using virsh with this config file. This had to be done in the host OS.
 
@@ -95,6 +93,38 @@ virsh net-start router-lan
 ```
 
 Then, the router VM was assigned 2 network interfaces - one with internet access and another with host-only interface, whereas the client VM was assigned only host-only interface. The host-only interface is to be set up as a LAN and the client should be able to get internet access using NAT.
+
+##### Router's Network Interfaces
+
+###### Router Host-only Adapter
+![router-hostonly](https://user-images.githubusercontent.com/23631617/139914358-a7f01b9d-84f2-43e8-92a2-9b2f1171d558.png)
+
+###### Router's NAT adapter (with internet access)
+![router-nat](https://user-images.githubusercontent.com/23631617/139914412-f2d5a655-24bb-4504-99e7-aaca97cdf375.png)
+
+
+##### Client's Network Interface
+
+![client-hostonly](https://user-images.githubusercontent.com/23631617/139914701-cac33641-61ea-4261-8337-10436fa6d698.png)
+
+> Implement NAT in the first vm, so that the second vm can access the internet
+
+On router VM, the host-only interface should be configured
+
+```console
+ifconfig ens8 192.168.0.1 netmask 255.255.255.0
+```
+
+Similarly on client VM,
+
+```console
+ifconfig ens3 192.168.0.2 netmask 255.255.255.0
+```
+
+Attempting to ping router from client and vice-versa.
+
+![host-guest-comms](https://user-images.githubusercontent.com/23631617/139915434-9778ff44-6ec4-442d-a771-cc59d1ebab40.png)
+
 
 > Note: Configure the first vm as a router, so make the LAN interfaces in the first vm as gateway to the LAN network. And in the second vm configure the gateway to the ip of the first vm LAN ip.
 
