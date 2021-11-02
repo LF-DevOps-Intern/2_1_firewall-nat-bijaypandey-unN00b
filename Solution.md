@@ -125,7 +125,27 @@ Attempting to ping router from client and vice-versa.
 
 ![host-guest-comms](https://user-images.githubusercontent.com/23631617/139915434-9778ff44-6ec4-442d-a771-cc59d1ebab40.png)
 
+To enable NAT, first we need to load `iptable_nat` kernel module, then turn on the `ip_forward` flag. Then we configure iptables to route traffic coming from host-only interface to another interface with internet access.
 
-> Note: Configure the first vm as a router, so make the LAN interfaces in the first vm as gateway to the LAN network. And in the second vm configure the gateway to the ip of the first vm LAN ip.
+```console
+modprobe iptable_nat
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
+iptables -A FORWARD -i ens8 -j ACCEPT
+```
+
+Finally, we need to edit `/etc/resolv.conf` in order to use DNS. We can add any nameserver in this file.
+
+```console
+nameserver 8.8.8.8
+```
+
+Finally, client VM is able to connect to the internet via NAT.
+
+![internet-working](https://user-images.githubusercontent.com/23631617/139917603-cb0f57c7-d9a0-4f52-86cb-6383a7ce8ee8.png)
+
+
+
+###### Referenced from: https://how-to.fandom.com/wiki/How_to_set_up_a_NAT_router_on_a_Linux-based_computer
 
 ---
