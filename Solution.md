@@ -34,11 +34,11 @@ sudo firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address
 We need to add ports `80 - http`, `443 - https` and `22 - ssh`. We can directly use service names to use default ports instead of writing them manually.
 
 ```console
-firewall-cmd --zone=publicweb --add-service=ssh --permanent
+firewall-cmd --zone=public --add-service=ssh --permanent
 
-firewall-cmd --zone=publicweb --add-service=http --permanent
+firewall-cmd --zone=public --add-service=http --permanent
 
-firewall-cmd --zone=publicweb --add-service=https --permanent
+firewall-cmd --zone=public --add-service=https --permanent
 ```
 
 ![Ports](https://user-images.githubusercontent.com/23631617/139878525-5336b213-bb97-4689-b0e8-73510f695a56.png)
