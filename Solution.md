@@ -27,7 +27,7 @@ sudo firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address
 
 > Allow http, https and ssh connection using firewall
 
-We need to add ports `80 - http`, `443 - https` and `22 - ssh`
+We need to add ports `80 - http`, `443 - https` and `22 - ssh`. We can directly use service names to use default ports instead of writing them manually.
 
 ```console
 
